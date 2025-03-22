@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import shop.mtcoding.bank.domain.user.UserEnum;
+import shop.mtcoding.bank.util.CustomResponseUtil;
 
 
 @Configuration
@@ -60,12 +61,7 @@ public class SecurityConfig {
         // 보통 이 핸들러는 인증되지 않는 사용자가 인증을 해야 하는 리소스에 접근하려 할 때 401 Unauthorized 응답을 반환하거나
         // 로그인 페이지로 리디렉션하는 방식으로 사용된다.
         http.exceptionHandling(e -> e.authenticationEntryPoint((request, response, authException) -> {
-            // JSON 형식으로 응답을 보내고 싶다면
-//            response.setContentType("application/json; charset=utf-8");
-            // 401: 인증이 필요한 API에 접근할 때 ( 이게 더 적합)
-            // 404: 인증은 완료되었지만 권한이 부족할 때
-            response.setStatus(403);
-            response.getWriter().println("error");
+            CustomResponseUtil.unAuthentication(response, "로그인을 진행해 주세요");
         }));
 
         http.authorizeHttpRequests(authorize -> authorize
