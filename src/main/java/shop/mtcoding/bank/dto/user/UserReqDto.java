@@ -13,6 +13,13 @@ public class UserReqDto {
 
     @Getter
     @Setter
+    public static class LoginReqDto {
+        private String username;
+        private String password;
+    }
+
+    @Getter
+    @Setter
     public static class JoinReqDto {
         // 영문, 숫자는 되고, 길이 최소 2~20자 이내
         @Pattern(regexp = "^[a-zA-Z]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요")
