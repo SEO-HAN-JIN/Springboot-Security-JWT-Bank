@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import shop.mtcoding.bank.dto.ResponseDto;
 import shop.mtcoding.bank.service.UserService;
 
@@ -26,7 +27,7 @@ public class CustomResponseUtil {
         }
     }
 
-    public static void unAuthentication(HttpServletResponse response, String msg){
+    public static void fail(HttpServletResponse response, String msg, HttpStatus httpStatus){
 
         try {
             ObjectMapper om = new ObjectMapper();
@@ -37,10 +38,11 @@ public class CustomResponseUtil {
             response.setContentType("application/json; charset=utf-8");
             // 401: 인증이 필요한 API에 접근할 때 ( 이게 더 적합)
             // 404: 인증은 완료되었지만 권한이 부족할 때
-            response.setStatus(401);
+            response.setStatus(httpStatus.value());
             response.getWriter().println(responseBody);
         } catch (Exception e) {
             log.error("서버 파싱 에러" );
         }
     }
+
 }

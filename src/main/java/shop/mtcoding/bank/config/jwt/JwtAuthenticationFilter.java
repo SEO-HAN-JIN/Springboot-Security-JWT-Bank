@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,9 +50,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             return authentication;
         } catch (Exception e) {
-            // authenticationEntryPoint에 걸린다.
+            // unsuccessfulAuthentication 호출함
             throw new InternalAuthenticationServiceException(e.getMessage());
         }
+    }
+
+    // 로그인 실패
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        CustomResponseUtil.fail(response, "로그인실패", HttpStatus.UNAUTHORIZED);
     }
 
     // return authentication 잘 작동하면 해당 메서드가 호출됩니다.
